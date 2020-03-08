@@ -8,45 +8,28 @@ class App extends React.Component {
 
   render() {
     return (
-      <FocusContext.Provider value={{ collectionId: null }}>
-        <h1>App header</h1>
+      <FocusContext.Provider value={{}}>
         <FocusableList isRow>
+          <FocusableItem withFocus>
+            <p>focus item oen</p>
+          </FocusableItem>
+          <FocusableItem>
+            <p>focus item two</p>
+          </FocusableItem>
+          <FocusableItem>
+            <p>focus item three</p>
+          </FocusableItem>
           <FocusableList>
-            <h1>inner row 1</h1>
-            <FocusableItem>
-              <div>
-                <p>one</p>
-              </div>
-            </FocusableItem>
-            <FocusableItem>
-              <div>
-                <p>two</p>
-              </div>
-            </FocusableItem>
-            <FocusableItem>
-              <div>
-                <p>three</p>
-              </div>
-            </FocusableItem>
-          </FocusableList>
-          <FocusableList>
-            <h1>inner row 2</h1>
-              <FocusableItem>
-                <div>
-                  <p>one</p>
-                </div>
-              </FocusableItem>
-              <FocusableItem>
-                <div>
-                  <p>two</p>
-                </div>
-              </FocusableItem>
-              <FocusableItem>
-                <div>
-                  <p>three</p>
-                </div>
-              </FocusableItem>
-          </FocusableList>
+          <FocusableItem>
+            <p>focus item oen</p>
+          </FocusableItem>
+          <FocusableItem>
+            <p>focus item two</p>
+          </FocusableItem>
+          <FocusableItem>
+            <p>focus item three</p>
+          </FocusableItem>
+        </FocusableList>
         </FocusableList>
       </FocusContext.Provider>
     );
