@@ -85,16 +85,17 @@ export class FocusableList extends React.Component {
   static contextType = FocusContext;
 
   componentWillMount() {
-    console.log('focus list')
     const ctx = this.context;
     const type = this.props.isRow ? RowFocusList : ColumnFocusList;
     const list = type.create({
       parent: ctx.list,
       stateful: this.props.stateful,
+      name: this.props.name,
     });
     this.setState({
       list
     });
+    if (ctx.list) ctx.list.add(list);
     FocusManager.instance().add(list, this.props.withFocus);
   }
 
@@ -114,10 +115,28 @@ class FocusManagerError extends Error {
   }
 }
 
+function getParentId(el) {
+  try {
+    const ret = el.parent.id;
+    return ret;
+  } catch (e) {
+    return null;
+  }
+}
+
+// function unFocusParent(el) {
+//   try {
+//     const parent = el.parent;
+//     parent.un
+//   } catch (e) {
+
+//   }
+// }
+
 class FocusManager {
   constructor() {
     this._root = null;
-    this.activeCollection = null;
+    this.activeItem = null;
     this._elements = new Map();
     this.handleKeyClick = this.handleKeyClick.bind(this);
     window.addEventListener('keydown', this.handleKeyClick);
@@ -127,23 +146,19 @@ class FocusManager {
     if (KEY_ACTIONS[ev.keyCode]) {
       const movement = KEY_ACTIONS[ev.keyCode];
       console.log('action', movement);
-      let current = this.activeCollection;
+      let current = this.activeItem.parent;
       console.log('current collection has action', current[movement])
-      const currentActiveItem = this.activeCollection.activeItem();
+      // const currentActiveItem = this.activeCollection.activeItem();
       while (current) {
         const collectionCanMakeMovement = current[movement];
+        console.log('on collection', current.name);
         if (collectionCanMakeMovement) {
           const newFocusItem = current[movement]();
-
+          console.log('there is a new focus item', newFocusItem);
           if (newFocusItem) {
-            const onDifferentCollection = current.id !== this.activeCollection.id;
-            if (onDifferentCollection) {
-              const prevFocusItem = this.activeCollection.unFocus();
-              console.log('previous focus item', prevFocusItem);
-              if (!this.activeCollection.stateful) currentActiveItem.unFocus();
-            } else {
-              currentActiveItem.unFocus();
-            }
+            const onDifferentCollection = getParentId(current) !== getParentId(this.activeItem);
+            if (onDifferentCollection) this.activeItem.parent.unFocus();
+            this.activeItem = newFocusItem;
           }        
         }
         
@@ -163,12 +178,8 @@ class FocusManager {
   add(col, withFocus) {
     if (!this._root) {
       this._root = col;
-      this.activeCollection = col;
     } else if (!col.parent) {
       FocusManagerError.throw("A non-root collection must have a parent");
-    }
-    if (withFocus) {
-      this.activeCollection = col;
     }
     this._elements.set(col.id, col);
   }
@@ -180,7 +191,7 @@ class FocusManager {
 
   focus(col, item) {
     const ret = col.activate(item);
-    if (ret) this.activeCollection = col;
+    if (ret) this.activeItem = item;
   }
 }
 

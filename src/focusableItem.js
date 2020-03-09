@@ -21,8 +21,7 @@ export default class Focusable {
   }
 
   static create({ parent, onFocus, onUnFocus, onOK }) {
-    const obj = new Focusable({ parent, onFocus, onUnFocus, onOK });
-    return Object.freeze(obj);
+    return Object.freeze(new Focusable({ parent, onFocus, onUnFocus, onOK }));
   }
 
   focus() {
@@ -32,6 +31,11 @@ export default class Focusable {
 
   unFocus() {
     this.onUnFocus();
+    return this;
+  }
+
+  enter() {
+    this.onOK();
     return this;
   }
 }

@@ -2,24 +2,25 @@ import { FocusListError, createId } from './util';
 
 const INVALID_INDEX = -1;
 const FIRST_ITEM = 0;
-
 class FocusList {
-  constructor({ parent, stateful }) {
+  constructor({ parent, stateful, name }) {
     this.children = [];
     this.activeIndex = INVALID_INDEX;
     this.parent = parent;
     this.stateful = stateful;
     this.id = createId();
+    this.name = name;
   }
 
-  static create({ parent = null, stateful = false }) {
-    return new FocusList({ parent, stateful });
+  static create({ parent = null, stateful = false, name }) {
+    return new FocusList({ parent, stateful, name });
   }
 
   focus(index = FIRST_ITEM) {
     if (this.children.length) {
       this.activeIndex = index;
-    return this.children[this.activeIndex].focus();
+      this.children[this.activeIndex].focus();
+      return this;
     } else {
       FocusListError.throw("Cannot focus on empty list");
     }
@@ -39,12 +40,18 @@ class FocusList {
     return ret;
   }
 
+  _unFocusCurrent() {
+    const currentActiveItem = this.activeItem();
+    if (currentActiveItem) currentActiveItem.unFocus();
+  }
+
   focusNext() {
     let index = this.activeIndex;
-    const activeItem = this.children[index + 1];
-    if (activeItem) {
+    const newItem = this.children[index + 1];
+    if (newItem) {
+      this._unFocusCurrent();
       ++this.activeIndex;
-      return activeItem.focus();
+      return newItem.focus();
     } else {
       return null;
     }
@@ -52,10 +59,11 @@ class FocusList {
 
   focusPrev() {
     let index = this.activeIndex;
-    const activeItem =  this.children[index - 1];
-    if (activeItem) {
+    const newItem =  this.children[index - 1];
+    if (newItem) {
+      this._unFocusCurrent();
       --this.activeIndex;
-      return activeItem.focus();
+      return newItem.focus();
     } else {
       return null;
     }
