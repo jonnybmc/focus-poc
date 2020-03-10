@@ -17,13 +17,12 @@ class FocusList {
   }
 
   focus(index = FIRST_ITEM) {
-    if (this.children.length) {
-      this.activeIndex = index;
-      this.children[this.activeIndex].focus();
-      return this;
-    } else {
-      FocusListError.throw("Cannot focus on empty list");
-    }
+    if (!this.children.length) FocusListError.throw("Cannot focus on empty list");
+    if (this.activeItem()) this._unFocusCurrent();
+    this.activeIndex = index;
+    this.children[this.activeIndex].focus();
+    return this;
+    
   }
 
   activate(itemToFocus) {

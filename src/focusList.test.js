@@ -60,6 +60,15 @@ function testFocusListFeatures(Class) {
       it('returns itself', () => {
         expect(obj.focus()).toEqual(obj);
       });
+      it('unfocuses on the previously focused item', () => {
+        const obj = Class.create({});
+        let i = 3; while (i--) obj.add(constructFocusableItem());
+        obj.focus();
+        const activeItem = obj.activeItem();
+        const spy = jest.spyOn(activeItem, 'unFocus');
+        obj.focus(2);
+        expect(spy).toHaveBeenCalled();
+      });
     });   
     describe('#focusNext', () => {
       let fc1, fc2, fc3;
