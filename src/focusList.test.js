@@ -69,6 +69,14 @@ function testFocusListFeatures(Class) {
         obj.focus(2);
         expect(spy).toHaveBeenCalled();
       });
+      it('does not unfocus if there is no previously focused item', () => {
+        const obj = Class.create({});
+        let i = 3; while (i--) obj.add(constructFocusableItem());
+        const spy = jest.spyOn(obj, '_unFocusCurrent');
+        obj.focus(2);
+        expect(spy).not.toHaveBeenCalled();
+      });
+      it('returns active element if it is a focusList instance')
     });   
     describe('#focusNext', () => {
       let fc1, fc2, fc3;
@@ -116,6 +124,7 @@ function testFocusListFeatures(Class) {
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
       });
+      it('returns active element if it is a focusList instance')
     });
     describe('#focusPrev', () => {
       let fc1, fc2, fc3;
@@ -158,6 +167,7 @@ function testFocusListFeatures(Class) {
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
       });
+      it('returns active element if it is a focusList instance')
     });
   });
 }

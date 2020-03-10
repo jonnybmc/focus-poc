@@ -22,7 +22,6 @@ class FocusList {
     this.activeIndex = index;
     this.children[this.activeIndex].focus();
     return this;
-    
   }
 
   activate(itemToFocus) {

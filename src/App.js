@@ -9,30 +9,16 @@ class App extends React.Component {
   render() {
     return (
       <FocusContext.Provider value={{}}>
-        <FocusableList name='root' isRow>
-          <FocusableList name='list 1'>
-            <FocusableItem withFocus>
-              <p>focus item oen</p>
-            </FocusableItem>
-            <FocusableItem>
-              <p>focus item two</p>
-            </FocusableItem>
-            <FocusableItem>
-              <p>focus item three</p>
-            </FocusableItem>
-          </FocusableList>
-          
-          <FocusableList name='list 2'>
-            <FocusableItem>
-              <p>focus item oen</p>
-            </FocusableItem>
-            <FocusableItem>
-              <p>focus item two</p>
-            </FocusableItem>
-            <FocusableItem>
-              <p>focus item three</p>
-            </FocusableItem>
-        </FocusableList>
+        <FocusableList name='list 2' isRow>
+          <FocusableItem withFocus>
+            <p>focus item oen</p>
+          </FocusableItem>
+          <FocusableItem>
+            <p>focus item two</p>
+          </FocusableItem>
+          <FocusableItem>
+            <p>focus item three</p>
+          </FocusableItem>
         </FocusableList>
       </FocusContext.Provider>
     );

@@ -69,9 +69,7 @@ export class FocusableItem extends React.Component {
   onOK() {
     console.log('pressed enter');
   }
-
   
-
   render() {
     return (
       <div className={this.state.hasFocus ? 'focused' : ''}>
@@ -124,15 +122,6 @@ function getParentId(el) {
   }
 }
 
-// function unFocusParent(el) {
-//   try {
-//     const parent = el.parent;
-//     parent.un
-//   } catch (e) {
-
-//   }
-// }
-
 class FocusManager {
   constructor() {
     this._root = null;
@@ -146,7 +135,7 @@ class FocusManager {
     if (KEY_ACTIONS[ev.keyCode]) {
       const movement = KEY_ACTIONS[ev.keyCode];
       console.log('action', movement);
-      let current = this.activeItem.parent;
+      let current = this.activeCollection;
       console.log('current collection has action', current[movement])
       // const currentActiveItem = this.activeCollection.activeItem();
       while (current) {
@@ -158,10 +147,9 @@ class FocusManager {
           if (newFocusItem) {
             const onDifferentCollection = getParentId(current) !== getParentId(this.activeItem);
             if (onDifferentCollection) this.activeItem.parent.unFocus();
-            this.activeItem = newFocusItem;
+            this.activeCollection = newFocusItem;
           }        
         }
-        
         current = current.parent;
       }
     }
@@ -175,7 +163,7 @@ class FocusManager {
     window.removeEventListener('keydown', this.handleKeyClick);
   }
 
-  add(col, withFocus) {
+  add(col) {
     if (!this._root) {
       this._root = col;
     } else if (!col.parent) {
@@ -190,8 +178,7 @@ class FocusManager {
   }
 
   focus(col, item) {
-    const ret = col.activate(item);
-    if (ret) this.activeItem = item;
+    this.activeCollection = col.activate(item);
   }
 }
 
