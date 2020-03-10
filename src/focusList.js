@@ -34,6 +34,9 @@ class FocusList {
   }
 
   unFocus() {
+    console.log('calling unfocus');
+    if (!this._indexInRange(this.activeIndex)) return null;
+    
     const ret = this.children[this.activeIndex].unFocus();
     this.activeIndex = this.stateful ? this.activeIndex : INVALID_INDEX;
     return ret;
@@ -86,6 +89,10 @@ class FocusList {
 
   activeItem() {
     return this.children[this.activeIndex];
+  }
+
+  contains(item) {
+    return !!this.children.find((fcItem) => fcItem.id === item.id);
   }
 }
 

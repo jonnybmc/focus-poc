@@ -69,7 +69,7 @@ export class FocusableItem extends React.Component {
   onOK() {
     console.log('pressed enter');
   }
-  
+
   render() {
     return (
       <div className={this.state.hasFocus ? 'focused' : ''}>
@@ -134,23 +134,23 @@ class FocusManager {
   handleKeyClick(ev) {
     if (KEY_ACTIONS[ev.keyCode]) {
       const movement = KEY_ACTIONS[ev.keyCode];
-      console.log('action', movement);
       let current = this.activeCollection;
-      console.log('current collection has action', current[movement])
-      // const currentActiveItem = this.activeCollection.activeItem();
+      let onDifferentCollection = false;
       while (current) {
         const collectionCanMakeMovement = current[movement];
-        console.log('on collection', current.name);
         if (collectionCanMakeMovement) {
           const newFocusItem = current[movement]();
-          console.log('there is a new focus item', newFocusItem);
           if (newFocusItem) {
-            const onDifferentCollection = getParentId(current) !== getParentId(this.activeItem);
-            if (onDifferentCollection) this.activeItem.parent.unFocus();
+            const newFocusItemIsChildOfCurrentCollection = this.activeCollection.contains(newFocusItem);
+            if (onDifferentCollection && !newFocusItemIsChildOfCurrentCollection) {
+              this.activeCollection.unFocus();
+            } 
             this.activeCollection = newFocusItem;
+            break;
           }        
         }
         current = current.parent;
+        onDifferentCollection = true;
       }
     }
   }

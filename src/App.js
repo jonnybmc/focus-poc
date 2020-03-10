@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import { FocusableList, FocusableItem, FocusContext } from './Focusable';
@@ -19,6 +18,18 @@ class App extends React.Component {
           <FocusableItem>
             <p>focus item three</p>
           </FocusableItem>
+
+          <FocusableList>
+            <FocusableItem>
+              <p>focus item a</p>
+            </FocusableItem>
+            <FocusableItem>
+              <p>focus item b</p>
+            </FocusableItem>
+            <FocusableItem>
+              <p>focus item c</p>
+            </FocusableItem>
+          </FocusableList>
         </FocusableList>
       </FocusContext.Provider>
     );
