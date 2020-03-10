@@ -136,7 +136,7 @@ function getParentId(el) {
 class FocusManager {
   constructor() {
     this._root = null;
-    this.activeItem = null;
+    this.activeCollection = null;
     this._elements = new Map();
     this.handleKeyClick = this.handleKeyClick.bind(this);
     window.addEventListener('keydown', this.handleKeyClick);

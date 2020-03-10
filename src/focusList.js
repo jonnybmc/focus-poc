@@ -41,17 +41,22 @@ class FocusList {
   }
 
   _unFocusCurrent() {
-    const currentActiveItem = this.activeItem();
-    if (currentActiveItem) currentActiveItem.unFocus();
+    this.activeItem().unFocus();
+  }
+
+  _indexInRange(i) {
+    return (0 <= i && i < this.children.length);
   }
 
   focusNext() {
     let index = this.activeIndex;
-    const newItem = this.children[index + 1];
+    const newIndex = index + 1;
+    const newItem = this.children[newIndex];
+    if (!this._indexInRange(newIndex)) return null;
+
     if (newItem) {
-      this._unFocusCurrent();
-      ++this.activeIndex;
-      return newItem.focus();
+      if (this._indexInRange(index)) this._unFocusCurrent();
+      return this.focus(newIndex);
     } else {
       return null;
     }
@@ -59,11 +64,13 @@ class FocusList {
 
   focusPrev() {
     let index = this.activeIndex;
-    const newItem =  this.children[index - 1];
+    const newIndex = index - 1;
+    const newItem =  this.children[newIndex];
+    if (!this._indexInRange(newIndex)) return null;
+
     if (newItem) {
       this._unFocusCurrent();
-      --this.activeIndex;
-      return newItem.focus();
+      return this.focus(newIndex);
     } else {
       return null;
     }
