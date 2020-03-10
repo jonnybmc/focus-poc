@@ -20,8 +20,9 @@ class FocusList {
     if (!this.children.length) FocusListError.throw("Cannot focus on empty list");
     if (this.activeItem()) this._unFocusCurrent();
     this.activeIndex = index;
-    this.children[this.activeIndex].focus();
-    return this;
+    const ret = this.children[this.activeIndex].focus();
+
+    return ret instanceof FocusList ? ret : this;
   }
 
   activate(itemToFocus) {

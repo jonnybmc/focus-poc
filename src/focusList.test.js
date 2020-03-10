@@ -76,7 +76,12 @@ function testFocusListFeatures(Class) {
         obj.focus(2);
         expect(spy).not.toHaveBeenCalled();
       });
-      it('returns active element if it is a focusList instance')
+      it('returns active element if it is a focusList instance', () => {
+        const fList = Class.create({});
+        fList.add(createFocusableItem());
+        obj.add(fList);
+        expect(obj.focus(3)).toEqual(fList);
+      });
     });   
     describe('#focusNext', () => {
       let fc1, fc2, fc3;
@@ -124,7 +129,6 @@ function testFocusListFeatures(Class) {
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
       });
-      it('returns active element if it is a focusList instance')
     });
     describe('#focusPrev', () => {
       let fc1, fc2, fc3;
@@ -158,7 +162,7 @@ function testFocusListFeatures(Class) {
         expect(obj.activeItem()).toEqual(fc1);
       });
       it('calls unFocus on the previously focused item', () => {
-        const obj = Class.create({});
+        obj = Class.create({});
         obj.add(constructFocusableItem()); obj.add(constructFocusableItem()); 
         obj.focus(1);
         const activeItem = obj.activeItem();
@@ -167,7 +171,6 @@ function testFocusListFeatures(Class) {
         expect(spy).toHaveBeenCalled();
         spy.mockRestore();
       });
-      it('returns active element if it is a focusList instance')
     });
   });
 }
