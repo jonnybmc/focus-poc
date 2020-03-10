@@ -34,7 +34,6 @@ class FocusList {
   }
 
   unFocus() {
-    console.log('calling unfocus');
     if (!this._indexInRange(this.activeIndex)) return null;
     
     const ret = this.children[this.activeIndex].unFocus();

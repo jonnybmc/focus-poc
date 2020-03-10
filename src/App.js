@@ -19,7 +19,7 @@ class App extends React.Component {
             <p>focus item three</p>
           </FocusableItem>
 
-          <FocusableList>
+          <FocusableList isRow>
             <FocusableItem>
               <p>focus item a</p>
             </FocusableItem>

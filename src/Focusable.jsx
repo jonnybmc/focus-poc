@@ -18,11 +18,6 @@ const KEY_ACTIONS = Object.freeze({
   [KEYS.RIGHT]: 'goRight',
 });
 
-const NAV_DIRECTION = Object.freeze({
-  UP_DOWN: Symbol('UP_DOWN'), // is a row
-  LEFT_RIGHT: Symbol('LEFT_RIGHT'), // is a column
-});
-
 let focusManager_ = null;
 export function getFocusManager() {
   if (!focusManager_) focusManager_ = FocusManager.create();
@@ -40,7 +35,6 @@ export class FocusableItem extends React.Component {
   }
 
   componentWillMount() {
-    console.log('focus item');
     const parent = this.context.list;
     const focusObj = Focusable.create({ 
       parent,
@@ -181,5 +175,3 @@ class FocusManager {
     this.activeCollection = col.activate(item);
   }
 }
-
-window.fc = FocusManager.instance();
