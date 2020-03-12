@@ -9955,6 +9955,18 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
+vanillajs-browser-helpers@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/vanillajs-browser-helpers/-/vanillajs-browser-helpers-1.1.8.tgz#dda67bb747a52657aa52191bb076249b8f0ae471"
+  integrity sha512-0DY1g6MSW9/i+s7NYVCAPmSotn9Adu6jGYwbYo93XLbj4F6OWnrHTLQnnAosNFgw7lAS0CwJyIL+j2WnRdIiPA==
+  dependencies:
+    vanillajs-helpers "^2.0.2"
+
+vanillajs-helpers@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/vanillajs-helpers/-/vanillajs-helpers-2.0.2.tgz#2f59b64e9a999d6e5944c0a44ee2db7d624ecbfd"
+  integrity sha512-tB3JDS/HchxjOavTmj7NZT2bqWqkZqmUW+NWGEExKHV0PXBpTVQm3b34SlurcvzV/THmPc4f4C6YPtt9JumzQA==
+
 vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"

@@ -2,6 +2,7 @@ import React from 'react';
 import Focusable from './focusableItem';
 import './Focusable.css';
 import { RowFocusList, ColumnFocusList } from './focusList';
+import inView from 'vanillajs-browser-helpers/inView';
 
 export const FocusContext = React.createContext({  });
 const KEYS = Object.freeze({
@@ -32,6 +33,8 @@ export class FocusableItem extends React.Component {
     this.onFocus = this.onFocus.bind(this);
     this.onUnFocus = this.onUnFocus.bind(this);
     this.onOK = this.onOK.bind(this);
+    this.nodeRef = React.createRef();
+    this.handleViewScroll = this.handleViewScroll.bind(this);
   }
 
   componentWillMount() {
@@ -48,7 +51,21 @@ export class FocusableItem extends React.Component {
     }
   }
 
+  handleViewScroll = ({ above, below, left, right }, $el) => {
+    if (below) {
+      $el.scrollIntoView({ behaviour: 'smooth', block: 'center' });
+    } else if (above) {
+      $el.scrollIntoView({ behaviour: 'smooth', block: 'center' });
+    }
+  }
+
   onFocus = () => {
+    if (this.nodeRef.current) {
+      const viewState = inView(this.nodeRef.current);
+      if (!viewState.inside) {
+        this.handleViewScroll(viewState, this.nodeRef.current);
+      }
+    }
     this.setState({
       hasFocus: true,
     });
@@ -66,7 +83,7 @@ export class FocusableItem extends React.Component {
 
   render() {
     return (
-      <div className={this.state.hasFocus ? 'focused ' : ''}>
+      <div className={this.state.hasFocus ? 'focused ' : ''} ref={this.nodeRef}>
         {this.props.children}
       </div>
     );

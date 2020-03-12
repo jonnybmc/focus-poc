@@ -25,7 +25,8 @@ class App extends React.Component {
               <div className='col-9'>
                 
               <FocusableList isRow>
-                <FocusableList>
+                {renderRows(10)}
+                {/* <FocusableList>
                   <div className='row'>
                     <h2>row 1</h2>
                   </div>
@@ -40,9 +41,9 @@ class App extends React.Component {
                       <p className='col-4'>focus item c</p>
                     </FocusableItem>
                   </div>
-                </FocusableList>
+                </FocusableList> */}
 
-                <FocusableList>
+                {/* <FocusableList>
                   <div className='row'>
                     <h2>row 2</h2>
                   </div>
@@ -57,7 +58,7 @@ class App extends React.Component {
                       <p className='col-4'>focus item c</p>
                     </FocusableItem>
                   </div>
-                </FocusableList>        
+                </FocusableList>         */}
 
               </FocusableList>
               </div>
@@ -67,6 +68,36 @@ class App extends React.Component {
       </FocusContext.Provider>
     );
   }
+}
+
+function renderRows(n) {
+  const ret = [];
+  let i = 1;
+  while (i <= n) {
+    ret.push(renderContentRow(i++));
+  }
+  return ret;
+}
+
+function renderContentRow(rowNum) {
+  return (
+    <FocusableList key={rowNum}>
+      <div className='row'>
+        <h2>row {rowNum}</h2>
+      </div>
+      <div className='row'>
+        <FocusableItem>
+          <p className='col-4'>focus item a</p>
+        </FocusableItem>
+        <FocusableItem>
+          <p className='col-4'>focus item b</p>
+        </FocusableItem>
+        <FocusableItem>
+          <p className='col-4'>focus item c</p>
+        </FocusableItem>
+      </div>
+    </FocusableList>  
+  );
 }
 
 export default App;
