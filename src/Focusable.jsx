@@ -1,5 +1,6 @@
 import React from 'react';
 import Focusable from './focusableItem';
+import './Focusable.css';
 import { RowFocusList, ColumnFocusList } from './focusList';
 
 export const FocusContext = React.createContext({  });
@@ -8,7 +9,6 @@ const KEYS = Object.freeze({
   DOWN: 40,
   LEFT: 37,
   RIGHT: 39,
-
   // OK: 13,
 });
 const KEY_ACTIONS = Object.freeze({
@@ -66,7 +66,7 @@ export class FocusableItem extends React.Component {
 
   render() {
     return (
-      <div className={this.state.hasFocus ? 'focused' : ''}>
+      <div className={this.state.hasFocus ? 'focused ' : ''}>
         {this.props.children}
       </div>
     );
@@ -104,15 +104,6 @@ export class FocusableList extends React.Component {
 class FocusManagerError extends Error {
   static throw(msg) {
     throw new FocusManagerError(msg);
-  }
-}
-
-function getParentId(el) {
-  try {
-    const ret = el.parent.id;
-    return ret;
-  } catch (e) {
-    return null;
   }
 }
 
