@@ -1,3 +1,6 @@
 .focused * {
   background:#CCCCFF;
 }
+.focusable {
+  display: inline-block;
+}

@@ -2,7 +2,7 @@ import { FocusableError, createId } from './util';
 
 
 export default class Focusable {
-  constructor({ parent = null, onFocus, onUnFocus, onOK }) {
+  constructor({ parent = null, onFocus, onUnFocus, onOK, leftPos }) {
     if (!parent) {
       FocusableError.throw("Cannot instantiate an item without a parent");
     }
@@ -18,10 +18,11 @@ export default class Focusable {
     this.onUnFocus = onUnFocus;
     this.onOK = onOK;
     this.parent = parent;
+    this.leftPos = leftPos;
   }
 
-  static create({ parent, onFocus, onUnFocus, onOK }) {
-    return Object.freeze(new Focusable({ parent, onFocus, onUnFocus, onOK }));
+  static create({ parent, onFocus, onUnFocus, onOK, leftPos }) {
+    return Object.freeze(new Focusable({ parent, onFocus, onUnFocus, onOK, leftPos }));
   }
 
   focus() {

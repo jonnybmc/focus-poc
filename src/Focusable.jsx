@@ -1,7 +1,11 @@
 import React from 'react';
 import Focusable from './focusableItem';
 import './Focusable.css';
-import { RowFocusList, ColumnFocusList } from './focusList';
+import { 
+  RowFocusList, 
+  ColumnFocusList, 
+  GridFocusList 
+} from './focusList';
 import inView from 'vanillajs-browser-helpers/inView';
 
 export const FocusContext = React.createContext({  });
@@ -19,12 +23,6 @@ const KEY_ACTIONS = Object.freeze({
   [KEYS.RIGHT]: 'goRight',
 });
 
-let focusManager_ = null;
-export function getFocusManager() {
-  if (!focusManager_) focusManager_ = FocusManager.create();
-  return focusManager_;
-}
-
 export class FocusableItem extends React.Component {
   static contextType = FocusContext;
   state = {};
@@ -37,16 +35,18 @@ export class FocusableItem extends React.Component {
     this.handleViewScroll = this.handleViewScroll.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentDidMount() {
     const parent = this.context.list;
     const focusObj = Focusable.create({ 
       parent,
       onFocus: this.onFocus,
       onUnFocus: this.onUnFocus,
       onOK: this.onOK,
+      leftPos: this.nodeRef.current.offsetLeft,
     });
     parent.add(focusObj);
     if (this.props.withFocus) {
+      console.log('we need to focus');
       FocusManager.instance().focus(parent, focusObj);
     }
   }
@@ -83,7 +83,7 @@ export class FocusableItem extends React.Component {
 
   render() {
     return (
-      <div className={this.state.hasFocus ? 'focused ' : ''} ref={this.nodeRef}>
+      <div className={this.state.hasFocus ? 'focused focusable' : 'focusable'} ref={this.nodeRef}>
         {this.props.children}
       </div>
     );
@@ -93,9 +93,19 @@ export class FocusableItem extends React.Component {
 export class FocusableList extends React.Component {
   static contextType = FocusContext;
 
-  componentWillMount() {
+  getType = () => {
+    if (this.props.isGrid) {
+      return GridFocusList;
+    } else if (this.props.isRow) {
+      return RowFocusList;
+    } else {
+      return ColumnFocusList;
+    }
+  }
+
+  UNSAFE_componentWillMount() {
     const ctx = this.context;
-    const type = this.props.isRow ? RowFocusList : ColumnFocusList;
+    const type = this.getType();
     const list = type.create({
       parent: ctx.list,
       stateful: this.props.stateful,
@@ -180,6 +190,7 @@ class FocusManager {
   }
 
   focus(col, item) {
+    console.log('collection', col);
     this.activeCollection = col.activate(item);
   }
 }

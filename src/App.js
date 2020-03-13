@@ -2,15 +2,25 @@ import React from 'react';
 import { FocusableList, FocusableItem, FocusContext } from './Focusable';
 
 class App extends React.Component {
-
   render() {
+    // return (
+    //   <FocusContext.Provider value={{}}>
+    //     <div className='container'>
+    //         <div className='row'>
+    //           <FocusableList isGrid>
+    //               {renderGridItems(150, true)}
+    //           </FocusableList>
+    //         </div>
+    //       </div>
+    //   </FocusContext.Provider>
+    // );
     return (
       <FocusContext.Provider value={{}}>
         <FocusableList name='list 2'>
           <div className='container'>
             <div className='row'>
               <div className='col-3'>
-                <FocusableList isRow>
+                <FocusableList isRow stateful>
                   <FocusableItem withFocus>
                     <p>focus item one</p>
                   </FocusableItem>
@@ -26,40 +36,6 @@ class App extends React.Component {
                 
               <FocusableList isRow>
                 {renderRows(10)}
-                {/* <FocusableList>
-                  <div className='row'>
-                    <h2>row 1</h2>
-                  </div>
-                  <div className='row'>
-                    <FocusableItem>
-                      <p className='col-4'>focus item a</p>
-                    </FocusableItem>
-                    <FocusableItem>
-                      <p className='col-4'>focus item b</p>
-                    </FocusableItem>
-                    <FocusableItem>
-                      <p className='col-4'>focus item c</p>
-                    </FocusableItem>
-                  </div>
-                </FocusableList> */}
-
-                {/* <FocusableList>
-                  <div className='row'>
-                    <h2>row 2</h2>
-                  </div>
-                  <div className='row'>
-                    <FocusableItem>
-                      <p className='col-4'>focus item a</p>
-                    </FocusableItem>
-                    <FocusableItem>
-                      <p className='col-4'>focus item b</p>
-                    </FocusableItem>
-                    <FocusableItem>
-                      <p className='col-4'>focus item c</p>
-                    </FocusableItem>
-                  </div>
-                </FocusableList>         */}
-
               </FocusableList>
               </div>
             </div>
@@ -75,6 +51,19 @@ function renderRows(n) {
   let i = 1;
   while (i <= n) {
     ret.push(renderContentRow(i++));
+  }
+  return ret;
+}
+
+function renderGridItems(n, focusFirst) {
+  let i = 0;
+  const ret = [];
+  while (i <= n) {
+    ret.push(
+      <FocusableItem key={i} withFocus={focusFirst ? i === 0 : false}>
+        <p className='col-3'>focus item {i++}</p>
+      </FocusableItem>
+    )
   }
   return ret;
 }
