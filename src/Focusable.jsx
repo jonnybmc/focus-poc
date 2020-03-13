@@ -35,7 +35,7 @@ export class FocusableItem extends React.Component {
     this.handleViewScroll = this.handleViewScroll.bind(this);
   }
 
-  UNSAFE_componentDidMount() {
+  componentDidMount() {
     const parent = this.context.list;
     const focusObj = Focusable.create({ 
       parent,
@@ -44,6 +44,7 @@ export class FocusableItem extends React.Component {
       onOK: this.onOK,
       leftPos: this.nodeRef.current.offsetLeft,
     });
+    console.log('we are about to add item')
     parent.add(focusObj);
     if (this.props.withFocus) {
       console.log('we need to focus');
@@ -103,10 +104,10 @@ export class FocusableList extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount() {
+  componentWillMount() {
     const ctx = this.context;
-    const type = this.getType();
-    const list = type.create({
+    const Type = this.getType();
+    const list = Type.create({
       parent: ctx.list,
       stateful: this.props.stateful,
       name: this.props.name,
@@ -194,3 +195,5 @@ class FocusManager {
     this.activeCollection = col.activate(item);
   }
 }
+
+window.fc = FocusManager;

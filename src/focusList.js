@@ -136,7 +136,6 @@ export class GridFocusList extends FocusList {
   constructor(opts) {
     super(opts);
     this.itemsPerRow = INVALID_INDEX;
-    this.children = [];
     this.activeRow = INVALID_INDEX;
     this.activeCol = INVALID_INDEX;
   }
@@ -176,7 +175,10 @@ export class GridFocusList extends FocusList {
   }
 
   activeItem() {
-    return this.children[this.activeRow][this.activeCol];
+    const activeRow = this.children[this.activeRow];
+    if (activeRow) {
+      return activeRow[this.activeCol];
+    }
   }
 
   focus(row = 0, col = 0) {
@@ -221,12 +223,17 @@ export class GridFocusList extends FocusList {
       return this.focus(this.activeRow, activeCol - 1);
     } else {
       row = this.children[this.activeRow - 1];
-      const lastEl = row[row.length - 1];
-      if (lastEl) {
-        return this.focus(this.activeRow, row.length - 1);
+      if (row) {
+        const lastEl = row[row.length - 1];
+        if (lastEl) {
+          return this.focus(this.activeRow - 1, row.length - 1);
+        } else {
+          return null;
+        }
       } else {
         return null;
       }
+      
     }
   }
 
@@ -239,16 +246,11 @@ export class GridFocusList extends FocusList {
     } else {
       row = this.children[this.activeRow + 1];
       if (row) {
-        const matchingColumnInNextRow = row[activeCol];
-        if (matchingColumnInNextRow) {
-          return this.focus(this.activeRow + 1, activeCol);
+        const nextRowFirstEl = row[FIRST_ITEM];
+        if (nextRowFirstEl) {
+          return this.focus(this.activeRow + 1);
         } else {
-          const newItem = row[row.length - 1];
-          if  (newItem) {
-            return this.focus(this.activeRow + 1, row.length - 1);
-          } else {
-            return null;
-          }
+          return null;
         }
       } else {
         return null;
