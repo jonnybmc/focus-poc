@@ -115,7 +115,6 @@ export class FocusableList extends React.Component {
     const list = Type.create({
       parent: ctx.list,
       stateful: this.props.stateful,
-      name: this.props.name,
       wrapLeft: this.props.wrapLeft,
     });
     this.setState({
@@ -127,7 +126,7 @@ export class FocusableList extends React.Component {
 
   componentWillUnmount() {
     const ctx = this.context;
-    ctx.list.remote(this.state.list);
+    ctx.list.remove(this.state.list);
   }
 
   render() {
@@ -209,7 +208,6 @@ class FocusManager {
   }
 
   focus(col, item) {
-    console.log('collection', col);
     this.activeCollection = col.activate(item);
   }
 }

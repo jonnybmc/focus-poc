@@ -3,17 +3,16 @@ import { FocusListError, createId } from './util';
 const INVALID_INDEX = -1;
 const FIRST_ITEM = 0;
 class FocusList {
-  constructor({ parent, stateful, name }) {
+  constructor({ parent, stateful }) {
     this.children = [];
     this.activeIndex = INVALID_INDEX;
     this.parent = parent;
     this.stateful = stateful;
     this.id = createId();
-    this.name = name;
   }
 
-  static create({ parent = null, stateful = false, name }) {
-    return new FocusList({ parent, stateful, name });
+  static create({ parent = null, stateful = false }) {
+    return new FocusList({ parent, stateful });
   }
 
   focus(index = FIRST_ITEM) {
@@ -183,7 +182,6 @@ export class GridFocusList extends FocusList {
   }
 
   focus(row = 0, col = 0) {
-    console.log('we just called focus')
     if (!this.children.length) FocusListError.throw("Cannot focus on empty list");
     const activeItem = this.activeItem();
     if (activeItem) activeItem.unFocus();
@@ -223,75 +221,76 @@ export class GridFocusList extends FocusList {
   goLeft() {
     const onFirstRow = this.activeRow === FIRST_ITEM;
     const onFirstCol = this.activeCol === FIRST_ITEM;
+    let ret = null;
     if (!this.wrapLeft && (onFirstCol && !onFirstRow)) {
-      return null;
+      return ret;
     }
 
     let row = this.children[this.activeRow];
     const activeCol = this.activeCol;
-    const newItem = row[activeCol - 1];
+    const prevCol = activeCol - 1;
+    const prevRow = this.activeRow - 1;
+    const lastColIndex = row.length - 1;
+    const newItem = row[prevCol];
+    
     if (newItem) {
-      return this.focus(this.activeRow, activeCol - 1);
+      ret = this.focus(this.activeRow,prevCol);
     } else {
-      row = this.children[this.activeRow - 1];
+      row = this.children[prevRow];
       if (row) {
-        const lastEl = row[row.length - 1];
+        const lastEl = row[lastColIndex];
         if (lastEl) {
-          return this.focus(this.activeRow - 1, row.length - 1);
-        } else {
-          return null;
-        }
-      } else {
-        return null;
-      }
+          ret = this.focus(prevRow, lastColIndex);
+        } 
+      } 
     }
+    return ret;
   }
 
   goRight() {
     let row = this.children[this.activeRow];
     const activeCol = this.activeCol;
-    const newItem = row[activeCol + 1];
+    const nextCol = activeCol + 1;
+    const nextRow = this.activeRow + 1;
+    const newItem = row[nextCol];
+    let ret = null;
     if (newItem) {
-      return this.focus(this.activeRow, activeCol + 1);
+      ret = this.focus(this.activeRow, nextCol);
     } else {
-      row = this.children[this.activeRow + 1];
+      row = this.children[nextRow];
       if (row) {
         const nextRowFirstEl = row[FIRST_ITEM];
         if (nextRowFirstEl) {
-          return this.focus(this.activeRow + 1);
-        } else {
-          return null;
-        }
-      } else {
-        return null;
-      }
+          ret = this.focus(nextRow);
+        } 
+      } 
     }
+    return ret;
   }
 
   goUp() {
     const activeCol = this.activeCol;
     const prevRow = this.children[this.activeRow - 1];
+    let ret = null;
     if (prevRow) {
-      return this.focus(this.activeRow - 1, activeCol);
-    } else {
-      return null;
+      ret = this.focus(this.activeRow - 1, activeCol);
     }
+    return ret;
   }
 
   goDown() {
     const activeCol = this.activeCol;
     const nextRow = this.children[this.activeRow + 1];
+    let ret = null;
     if (nextRow) {
       if (nextRow[activeCol]) {
-        return this.focus(this.activeRow + 1, activeCol);
+        ret = this.focus(this.activeRow + 1, activeCol);
       } else {
         const newItem = nextRow[nextRow.length - 1];
         if (newItem) {
-          return this.focus(this.activeRow + 1, nextRow.length - 1);
+          ret = this.focus(this.activeRow + 1, nextRow.length - 1);
         } 
       }
-    } else {
-      return null;
-    }
+    } 
   }
 }
