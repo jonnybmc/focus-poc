@@ -3,46 +3,63 @@ import { FocusableList, FocusableItem, FocusContext } from './Focusable';
 
 class App extends React.Component {
   render() {
-    return (
-      <FocusContext.Provider value={{}}>
-        <div className='container'>
-            <div className='row'>
-              <FocusableList isGrid>
-                  {renderGridItems(150, true)}
-              </FocusableList>
-            </div>
-          </div>
-      </FocusContext.Provider>
-    );
     // return (
     //   <FocusContext.Provider value={{}}>
-    //     <FocusableList name='list 2'>
-    //       <div className='container'>
+    //     <div className='container'>
     //         <div className='row'>
-    //           <div className='col-3'>
-    //             <FocusableList isRow stateful>
-    //               <FocusableItem withFocus>
+    //           <FocusableList>
+    //             <div className='col-3'>
+    //               <FocusableList isRow stateful>
+    //                 <FocusableItem withFocus>
     //                 <p>focus item one</p>
-    //               </FocusableItem>
-    //               <FocusableItem>
-    //                 <p>focus item two</p>
-    //               </FocusableItem>
-    //               <FocusableItem>
-    //                 <p>focus item three</p>
-    //               </FocusableItem>
-    //             </FocusableList>
-    //           </div>
-    //           <div className='col-9'>
-                
-    //           <FocusableList isRow>
-    //             {renderRows(10)}
+    //                 </FocusableItem>
+    //                 <FocusableItem>
+    //                   <p>focus item two</p>
+    //                 </FocusableItem>
+    //                 <FocusableItem>
+    //                   <p>focus item three</p>
+    //                 </FocusableItem>
+    //               </FocusableList>
+    //             </div>
+    //             <div className='col-9'>
+    //               <FocusableList isGrid>
+    //                   {renderGridItems(150, false)}
+    //               </FocusableList>
+    //             </div>
     //           </FocusableList>
-    //           </div>
     //         </div>
     //       </div>
-    //     </FocusableList>
     //   </FocusContext.Provider>
     // );
+    return (
+      <FocusContext.Provider value={{}}>
+        <FocusableList name='list 2'>
+          <div className='container'>
+            <div className='row'>
+              <div className='col-3'>
+                <FocusableList isRow stateful>
+                  <FocusableItem withFocus>
+                    <p>focus item one</p>
+                  </FocusableItem>
+                  <FocusableItem>
+                    <p>focus item two</p>
+                  </FocusableItem>
+                  <FocusableItem>
+                    <p>focus item three</p>
+                  </FocusableItem>
+                </FocusableList>
+              </div>
+              <div className='col-9'>
+                
+              <FocusableList isRow>
+                {renderRows(10)}
+              </FocusableList>
+              </div>
+            </div>
+          </div>
+        </FocusableList>
+      </FocusContext.Provider>
+    );
   }
 }
 
@@ -75,7 +92,7 @@ function renderContentRow(rowNum) {
         <h2>row {rowNum}</h2>
       </div>
       <div className='row'>
-        <FocusableItem>
+        <FocusableItem onFocus={() => console.log('we just focused')}>
           <p className='col-4'>focus item a</p>
         </FocusableItem>
         <FocusableItem>

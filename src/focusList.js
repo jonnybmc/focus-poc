@@ -138,6 +138,7 @@ export class GridFocusList extends FocusList {
     this.itemsPerRow = INVALID_INDEX;
     this.activeRow = INVALID_INDEX;
     this.activeCol = INVALID_INDEX;
+    this.wrapLeft = opts.wrapLeft;
   }
 
   static create(opts) {
@@ -195,7 +196,11 @@ export class GridFocusList extends FocusList {
   }
 
   unFocus() {
-
+    const activeItem = this.activeItem();
+    this.activeCol = INVALID_INDEX;
+    this.activeRow = INVALID_INDEX;
+    if (activeItem) return activeItem.unFocus();
+    return null;
   }
 
   find(item) {
@@ -216,6 +221,12 @@ export class GridFocusList extends FocusList {
   }
 
   goLeft() {
+    const onFirstRow = this.activeRow === FIRST_ITEM;
+    const onFirstCol = this.activeCol === FIRST_ITEM;
+    if (!this.wrapLeft && (onFirstCol && !onFirstRow)) {
+      return null;
+    }
+
     let row = this.children[this.activeRow];
     const activeCol = this.activeCol;
     const newItem = row[activeCol - 1];
@@ -233,7 +244,6 @@ export class GridFocusList extends FocusList {
       } else {
         return null;
       }
-      
     }
   }
 

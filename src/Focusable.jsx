@@ -9,7 +9,7 @@ import {
 import inView from 'vanillajs-browser-helpers/inView';
 
 export const FocusContext = React.createContext({  });
-const KEYS = Object.freeze({
+const MOVEMENT_KEYS = Object.freeze({
   UP: 38,
   DOWN: 40,
   LEFT: 37,
@@ -17,11 +17,12 @@ const KEYS = Object.freeze({
   // OK: 13,
 });
 const KEY_ACTIONS = Object.freeze({
-  [KEYS.UP]: 'goUp',
-  [KEYS.DOWN]: 'goDown',
-  [KEYS.LEFT]: 'goLeft',
-  [KEYS.RIGHT]: 'goRight',
+  [MOVEMENT_KEYS.UP]: 'goUp',
+  [MOVEMENT_KEYS.DOWN]: 'goDown',
+  [MOVEMENT_KEYS.LEFT]: 'goLeft',
+  [MOVEMENT_KEYS.RIGHT]: 'goRight',
 });
+const enterKeyCode = 13;
 
 export class FocusableItem extends React.Component {
   static contextType = FocusContext;
@@ -44,10 +45,8 @@ export class FocusableItem extends React.Component {
       onOK: this.onOK,
       leftPos: this.nodeRef.current.offsetLeft,
     });
-    console.log('we are about to add item')
     parent.add(focusObj);
     if (this.props.withFocus) {
-      console.log('we need to focus');
       FocusManager.instance().focus(parent, focusObj);
     }
   }
@@ -79,7 +78,7 @@ export class FocusableItem extends React.Component {
   };
 
   onOK() {
-    console.log('pressed enter');
+    this.props.onOK();
   }
 
   render() {
@@ -90,6 +89,12 @@ export class FocusableItem extends React.Component {
     );
   }
 }
+
+FocusableItem.defaultProps = {
+  onOK: () => console.log('we pressed enter'),
+}
+
+
 
 export class FocusableList extends React.Component {
   static contextType = FocusContext;
@@ -111,12 +116,18 @@ export class FocusableList extends React.Component {
       parent: ctx.list,
       stateful: this.props.stateful,
       name: this.props.name,
+      wrapLeft: this.props.wrapLeft,
     });
     this.setState({
       list
     });
     if (ctx.list) ctx.list.add(list);
     FocusManager.instance().add(list, this.props.withFocus);
+  }
+
+  componentWillUnmount() {
+    const ctx = this.context;
+    ctx.list.remote(this.state.list);
   }
 
   render() {
@@ -145,7 +156,14 @@ class FocusManager {
   }
 
   handleKeyClick(ev) {
-    if (KEY_ACTIONS[ev.keyCode]) {
+    const keyCode = ev.keyCode;
+    if (enterKeyCode === keyCode) {
+      const activeCol = this.activeCollection;
+      if (activeCol) {
+        const activeItem = activeCol.activeItem();
+        if (activeItem) activeItem.enter();
+      }
+    } else if (KEY_ACTIONS[keyCode]) {
       const movement = KEY_ACTIONS[ev.keyCode];
       let current = this.activeCollection;
       let onDifferentCollection = false;
